@@ -1,0 +1,70 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Grenadine" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <item name="appBarLayoutStyle">@style/AppbarLayoutStyle</item>
+        <item name="android:fontFamily">@font/luciole_regular</item>
+        <item name="fontFamily">@font/luciole_regular</item>
+        <item name="floatingActionButtonStyle">@style/FAB</item>
+    </style>
+
+    <style name="Theme.Grenadine" parent="Base.Theme.Grenadine">
+        <item name="colorPrimary">@color/mainColor</item>
+        <item name="android:colorPrimary">@color/mainColor</item>
+        <item name="colorPrimaryDark">@color/darkColor</item>
+        <item name="android:colorPrimaryDark">@color/darkColor</item>
+        <item name="android:colorAccent">@color/accentLightColor</item>
+        <item name="colorAccent">@color/accentLightColor</item>
+        <item name="android:colorSecondary">@color/accentDarkColor</item>
+        <item name="colorSecondary">@color/accentDarkColor</item>
+        <item name="android:textColor">@color/darkTextColor</item>
+        <item name="android:windowBackground">@color/lightBackground</item>
+    </style>
+
+    <style name="AppbarLayoutStyle" parent="Widget.Material3.AppBarLayout">
+        <item name="android:textColor">@color/darkTextColor</item>
+        <item name="android:background">@color/mainColor</item>
+        <item name="android:titleTextAppearance">@style/ToolbarTitle</item>
+    </style>
+
+    <style name="ToolbarTitle" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="android:fontFamily">@font/luciole_regular_italic</item>
+        <item name="fontFamily">@font/luciole_regular_italic</item>
+    </style>
+
+    <style name="ToolbarStyle" parent="@style/Widget.MaterialComponents.Toolbar">
+        <item name="android:titleTextAppearance">@style/ToolbarTitle</item>
+        <item name="titleTextAppearance">@style/ToolbarTitle</item>
+    </style>
+
+    <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="titleTextAppearance">@style/ToolbarTitle</item>
+        <item name="subtitleTextAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
+        </item>
+    </style>
+
+
+    <style name="FAB" parent="Widget.Design.FloatingActionButton">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Material3.SmallComponent</item>
+    </style>
+
+
+    //===================================================================
+
+
+    <style name="MainContainer">
+        <item name="android:background">@color/lightBackground</item>
+    </style>
+
+    <style name="NoteItem">
+        <item name="android:background">@drawable/bg_note_item</item>
+    </style>
+
+    <style name="ButtonBase" parent="@style/Widget.Material3.Button" />
+
+    <style name="ButtonBase.Icon" parent="@style/ButtonBase">
+        <item name="android:tint">@color/darkTextColor</item>
+    </style>
+
+
+</resources>

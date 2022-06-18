@@ -1,0 +1,30 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+
+    <style name="Theme.Grenadine" parent="Base.Theme.Grenadine">
+        <item name="colorPrimary">@color/mainColorNight</item>
+        <item name="android:colorPrimary">@color/mainColorNight</item>
+        <item name="colorPrimaryDark">@color/darkColorNight</item>
+        <item name="android:colorPrimaryDark">@color/darkColorNight</item>
+        <item name="android:colorAccent">@color/mainColor</item>
+        <item name="colorAccent">@color/mainColor</item>
+        <item name="android:colorSecondary">@color/darkColor</item>
+        <item name="colorSecondary">@color/darkColor</item>
+        <item name="android:textColor">@color/lightTextColor</item>
+        <item name="android:windowBackground">@color/darkBackground</item>
+    </style>
+
+    <style name="AppbarLayoutStyle" parent="Widget.Material3.AppBarLayout">
+        <item name="android:textColor">@color/lightTextColor</item>
+        <item name="android:background">@color/mainColorNight</item>
+        <item name="android:titleTextAppearance">@style/ToolbarTitle</item>
+    </style>
+
+    <style name="MainContainer">
+        <item name="android:background">@color/darkBackground</item>
+    </style>
+
+    <style name="ButtonBase.Icon" parent="@style/ButtonBase">
+        <item name="android:tint">@color/lightTextColor</item>
+    </style>
+</resources>
