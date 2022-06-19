@@ -1,4 +1,4 @@
-package com.silwek.grenadine
+package com.silwek.grenadine.ui
 
 import android.app.Dialog
 import android.content.Context
@@ -15,7 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.silwek.grenadine.models.Note
+import com.silwek.grenadine.R
 import com.silwek.grenadine.databinding.ViewFormNoteBinding
+import com.silwek.grenadine.viewmodels.getNotesViewModel
 
 class NewNoteDialogFragment : DialogFragment() {
 

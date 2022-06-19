@@ -1,4 +1,4 @@
-package com.silwek.grenadine
+package com.silwek.grenadine.viewmodels
 
 import android.app.Activity
 import android.content.Context

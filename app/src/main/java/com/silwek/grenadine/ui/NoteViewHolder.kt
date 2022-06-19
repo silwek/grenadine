@@ -1,9 +1,10 @@
-package com.silwek.grenadine
+package com.silwek.grenadine.ui
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.silwek.grenadine.models.Note
 import com.silwek.grenadine.databinding.ItemNoteBinding
 
 class NoteViewHolder(

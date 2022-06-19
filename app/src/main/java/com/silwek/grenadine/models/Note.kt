@@ -1,6 +1,7 @@
-package com.silwek.grenadine
+package com.silwek.grenadine.models
 
 import com.google.firebase.Timestamp
+import com.silwek.grenadine.toLocalDateTime
 import java.time.Duration
 import java.time.LocalDateTime
 

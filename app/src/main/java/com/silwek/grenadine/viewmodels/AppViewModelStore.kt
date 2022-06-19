@@ -1,4 +1,4 @@
-package com.silwek.grenadine
+package com.silwek.grenadine.viewmodels
 
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
