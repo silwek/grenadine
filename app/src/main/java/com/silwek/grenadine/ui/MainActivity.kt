@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.silwek.grenadine.databinding.ActivityMainBinding
 import com.silwek.grenadine.models.Note
 import com.silwek.grenadine.viewmodels.NotesViewModel
-import com.silwek.grenadine.databinding.ActivityMainBinding
 import com.silwek.grenadine.viewmodels.getNotesViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -53,9 +53,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun deleteNote(note: Note) {
-        val idToDelete = note.id
-        if (idToDelete != null)
-            notesViewModel.removeNote(idToDelete)
+        notesViewModel.removeNote(note)
     }
 
     private fun addNote() {

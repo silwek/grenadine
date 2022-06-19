@@ -12,7 +12,7 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(NotesViewModel::class.java) -> {
-                NotesViewModel() as T
+                NotesViewModel(context) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }

@@ -95,7 +95,7 @@ class NotesAdapter(context: Context) : RecyclerView.Adapter<NoteViewHolder>() {
             }
 
             override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-                return newItem.label == oldItem.label && newItem.staleDate?.seconds?.equals(oldItem.staleDate?.seconds) == true
+                return newItem.label == oldItem.label && newItem.staleDate?.equals(oldItem.staleDate) == true
             }
         }
     }

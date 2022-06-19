@@ -1,33 +1,23 @@
 package com.silwek.grenadine.models
 
-import com.google.firebase.Timestamp
-import com.silwek.grenadine.toLocalDateTime
 import java.time.Duration
 import java.time.LocalDateTime
 
 class Note(
     var label: String? = null,
-    var creationDate: Timestamp? = null,
-    var staleDate: Timestamp? = null,
+    var creationDate: LocalDateTime? = null,
+    var staleDate: LocalDateTime? = null,
     var id: String? = null
 ) {
-    val creationLocalDateTime: LocalDateTime?
-        get() {
-            return creationDate?.toLocalDateTime()
-        }
-    val staleLocalDateTime: LocalDateTime?
-        get() {
-            return staleDate?.toLocalDateTime()
-        }
     var staleProgress: Float = 0f
         private set
 
 
     fun computeStaleProgress() {
         val totalLifeTime =
-            Duration.between(creationLocalDateTime, staleLocalDateTime).seconds.toFloat()
+            Duration.between(creationDate, staleDate).seconds.toFloat()
         val currentLifeTime =
-            Duration.between(creationLocalDateTime, LocalDateTime.now()).seconds.toFloat()
+            Duration.between(creationDate, LocalDateTime.now()).seconds.toFloat()
         staleProgress = currentLifeTime / totalLifeTime
     }
 

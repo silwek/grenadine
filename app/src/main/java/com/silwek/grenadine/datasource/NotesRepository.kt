@@ -1,108 +1,99 @@
 package com.silwek.grenadine.datasource
 
-import android.util.Log
-import com.google.firebase.Timestamp
-import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
+import android.content.Context
+import androidx.room.Room
+import com.silwek.grenadine.datasource.room.RoomAppDatabase
+import com.silwek.grenadine.datasource.room.entities.NoteEntity
 import com.silwek.grenadine.models.Note
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
 
-class NotesRepository {
-    private val userId = "MeKkrfCuTnBWdakuTLzr"
-    private val db = Firebase.firestore
-    private val notesCollection by lazy {
-        db.collection("users").document(userId).collection("notes")
-    }
+interface NotesRepository {
 
-    fun loadNotes(onSuccess: (List<Note>) -> Unit) {
-        notesCollection.get()
-            .addOnSuccessListener { result ->
-                val notes = ArrayList<Note>()
-                for (document in result) {
-                    val note = documentToNote(document)
-                    notes.add(note)
-                }
+    suspend fun loadNotes(onSuccess: (List<Note>) -> Unit)
+
+    suspend fun addNote(note: Note, onSuccess: (id: String) -> Unit)
+
+    suspend fun updateNote(newLabel: String, note: Note, onSuccess: (Note) -> Unit)
+
+    suspend fun reviveNote(note: Note, newStaleDate: LocalDateTime, onSuccess: (Note) -> Unit)
+
+    suspend fun removeNote(note: Note, onSuccess: () -> Unit)
+
+    suspend fun removeNotes(notes: List<Note>, onSuccess: () -> Unit)
+}
+
+
+class RoomRepository(context: Context) : NotesRepository {
+    private val db = Room.databaseBuilder(
+        context.applicationContext,
+        RoomAppDatabase::class.java, "grenadine-name"
+    ).build()
+    private val noteDao by lazy { db.noteDao() }
+
+
+    override suspend fun loadNotes(onSuccess: (List<Note>) -> Unit) {
+        withContext(Dispatchers.IO) {
+            val noteEntities = noteDao.getAll()
+            val notes = noteEntities.map { it.toNote() }
+            withContext(Dispatchers.Main) {
                 onSuccess(notes)
             }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting notes.", exception)
-            }
-    }
-
-    fun addNote(note: Note, onSuccess: (id: String) -> Unit) {
-
-        val noteRequest = hashMapOf(
-            "label" to note.label,
-            "creationDate" to note.creationDate,
-            "staleDate" to note.staleDate,
-        )
-        notesCollection.add(noteRequest)
-            .addOnSuccessListener { result ->
-                Log.d(TAG, "Note successfully written!")
-                onSuccess(result.id)
-            }
-            .addOnFailureListener { e -> Log.w(TAG, "Error writing note", e) }
-    }
-
-    fun updateNote(newLabel: String, note: Note, onSuccess: () -> Unit) {
-        val id = note.id ?: return
-        val noteRequest = hashMapOf(
-            "label" to (note.label ?: "")
-        ).toMap()
-        notesCollection.document(id).update(noteRequest)
-            .addOnSuccessListener {
-                Log.d(TAG, "Note successfully updated!")
-                onSuccess()
-            }
-            .addOnFailureListener { e -> Log.w(TAG, "Error updating note", e) }
-    }
-
-    fun reviveNote(note: Note, newStaleDate: Timestamp, onSuccess: () -> Unit) {
-        val id = note.id ?: return
-        val noteRequest = hashMapOf(
-            "staleDate" to newStaleDate,
-        ).toMap()
-        notesCollection.document(id).update(noteRequest)
-            .addOnSuccessListener {
-                Log.d(TAG, "Note successfully updated!")
-                onSuccess()
-            }
-            .addOnFailureListener { e -> Log.w(TAG, "Error updating note", e) }
-    }
-
-    fun removeNote(idToDelete: String, onSuccess: () -> Unit) {
-        notesCollection.document(idToDelete)
-            .delete()
-            .addOnSuccessListener {
-                Log.d(TAG, "Note with id \"$idToDelete\" successfully deleted!")
-                onSuccess()
-            }
-            .addOnFailureListener { e ->
-                Log.w(
-                    TAG,
-                    "Error deleting note with id \"$idToDelete\"",
-                    e
-                )
-            }
-    }
-
-    fun removeNotes(notes: List<Note>, onSuccess: () -> Unit) {
-        db.runBatch { batch ->
-            notes.forEach { note ->
-                note.id?.let { idToDelete ->
-                    batch.delete(notesCollection.document(idToDelete))
-                }
-            }
-        }.addOnCompleteListener {
-            Log.d(TAG, "Staled notes successfully deleted!")
-            onSuccess()
         }
     }
 
-    private fun documentToNote(document: QueryDocumentSnapshot): Note {
-        return document.toObject<Note>().apply {
-            id = document.id
+    override suspend fun addNote(note: Note, onSuccess: (id: String) -> Unit) {
+        withContext(Dispatchers.IO) {
+            val insertId = noteDao.insert(NoteEntity.fromNote(note))
+            withContext(Dispatchers.Main) {
+                onSuccess(insertId.toString())
+            }
+        }
+    }
+
+    override suspend fun updateNote(newLabel: String, note: Note, onSuccess: (Note) -> Unit) {
+        withContext(Dispatchers.IO) {
+            val newNote = NoteEntity.fromNote(note)
+            newNote.label = newLabel
+            noteDao.update(newNote)
+            withContext(Dispatchers.Main) {
+                onSuccess(newNote.toNote())
+            }
+        }
+    }
+
+    override suspend fun reviveNote(
+        note: Note,
+        newStaleDate: LocalDateTime,
+        onSuccess: (Note) -> Unit
+    ) {
+        withContext(Dispatchers.IO) {
+            val newNote = NoteEntity.fromNote(note)
+            newNote.staleDate = newStaleDate
+            noteDao.update(newNote)
+            withContext(Dispatchers.Main) {
+                onSuccess(newNote.toNote())
+            }
+        }
+    }
+
+    override suspend fun removeNote(note: Note, onSuccess: () -> Unit) {
+        withContext(Dispatchers.IO) {
+            noteDao.delete(NoteEntity.fromNote(note))
+            withContext(Dispatchers.Main) {
+                onSuccess()
+            }
+        }
+    }
+
+    override suspend fun removeNotes(notes: List<Note>, onSuccess: () -> Unit) {
+        withContext(Dispatchers.IO) {
+            val noteEntities = notes.map { NoteEntity.fromNote(it) }
+            noteDao.deleteNotes(*noteEntities.toTypedArray())
+            withContext(Dispatchers.Main) {
+                onSuccess()
+            }
         }
     }
 

@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -9,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.silwek.grenadine"
-        minSdk 28
+        minSdk 24
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -24,6 +25,8 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -43,8 +46,13 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
     //Data
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.1.2'
+    def room_version = "2.4.2"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
     //UI
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 

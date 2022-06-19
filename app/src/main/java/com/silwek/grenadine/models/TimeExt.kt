@@ -1,12 +1,14 @@
-package com.silwek.grenadine
+package com.silwek.grenadine.models
 
-import com.google.firebase.Timestamp
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.*
 
-fun Timestamp.toLocalDateTime(): LocalDateTime {
-    return Instant.ofEpochSecond(this.seconds)
+fun Long.secondToLocalDateTime(): LocalDateTime {
+    return Instant.ofEpochSecond(this)
         .atZone(ZoneId.systemDefault())
         .toLocalDateTime()
+}
+
+fun LocalDateTime.toSecond(): Long {
+    val zdt: ZonedDateTime = atZone(ZoneId.systemDefault())
+    return zdt.toInstant().toEpochMilli() / 1000
 }
