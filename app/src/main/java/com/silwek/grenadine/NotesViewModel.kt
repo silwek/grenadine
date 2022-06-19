@@ -14,12 +14,13 @@ import com.google.firebase.ktx.Firebase
 import java.util.*
 
 class NotesViewModel : ViewModel() {
-    private val id = "MeKkrfCuTnBWdakuTLzr"
+    private val userId = "MeKkrfCuTnBWdakuTLzr"
     private val db = Firebase.firestore
-    private val notesCollection by lazy { db.collection("users").document(id).collection("notes") }
+    private val notesCollection by lazy { db.collection("users").document(userId).collection("notes") }
 
     private val _notes: MutableLiveData<MutableList<Note>> = MutableLiveData()
     val notes: LiveData<MutableList<Note>> = _notes
+    var editNote: Note? = null
 
 
     fun loadNotes() {
@@ -60,7 +61,7 @@ class NotesViewModel : ViewModel() {
                 val notes = this.notes.value?.toMutableList() ?: ArrayList(1)
                 note.id = result.id
                 note.computeStaleProgress()
-                notes.add(note)
+                notes.add(0, note)
                 Handler(Looper.getMainLooper()).run {
                     _notes.value = notes
                 }
@@ -77,7 +78,13 @@ class NotesViewModel : ViewModel() {
                     _notes.value = _notes.value?.apply { removeIf { it.id == idToDelete } }
                 }
             }
-            .addOnFailureListener { e -> Log.w(TAG, "Error deleting note with id \"$idToDelete\"", e) }
+            .addOnFailureListener { e ->
+                Log.w(
+                    TAG,
+                    "Error deleting note with id \"$idToDelete\"",
+                    e
+                )
+            }
     }
 
     private fun removeNotes(notes: List<Note>) {
@@ -107,13 +114,53 @@ class NotesViewModel : ViewModel() {
             }
         }
         removeNotes(staledNotes)
-        return freshNotes.sortedBy { it.staleProgress }
+        return orderNotes(freshNotes)
+    }
+
+    private fun orderNotes(notes: MutableList<Note>): List<Note> {
+        return notes.sortedBy { it.staleProgress }
     }
 
     private fun documentToNote(document: QueryDocumentSnapshot): Note {
         return document.toObject<Note>().apply {
             id = document.id
         }
+    }
+
+    fun updateNote(newLabel: String, note: Note) {
+        val id = note.id ?: return
+        val noteRequest = hashMapOf(
+            "label" to (note.label ?: "")
+        ).toMap()
+        notesCollection.document(id).update(noteRequest)
+            .addOnSuccessListener {
+                Log.d(TAG, "Note successfully updated!")
+                note.label = newLabel
+                Handler(Looper.getMainLooper()).run {
+                    _notes.value = notes.value
+                }
+            }
+            .addOnFailureListener { e -> Log.w(TAG, "Error updating note", e) }
+    }
+
+    fun reviveNote(note: Note) {
+        val id = note.id ?: return
+        val actualStaleDateSeconds = note.staleDate?.seconds ?: return
+        val newStaleDate = Timestamp(actualStaleDateSeconds + STALE_SEC_DEFAULT, 0)
+        val noteRequest = hashMapOf(
+            "staleDate" to newStaleDate,
+        ).toMap()
+        notesCollection.document(id).update(noteRequest)
+            .addOnSuccessListener {
+                Log.d(TAG, "Note successfully updated!")
+                note.staleDate = newStaleDate
+                note.computeStaleProgress()
+                val notes = orderNotes(notes.value?.toMutableList() ?: ArrayList()).toMutableList()
+                Handler(Looper.getMainLooper()).run {
+                    _notes.value = notes
+                }
+            }
+            .addOnFailureListener { e -> Log.w(TAG, "Error updating note", e) }
     }
 
     companion object {

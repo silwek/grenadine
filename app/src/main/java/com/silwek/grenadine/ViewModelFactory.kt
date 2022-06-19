@@ -2,6 +2,7 @@ package com.silwek.grenadine
 
 import android.app.Activity
 import android.content.Context
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
@@ -31,3 +32,10 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
 
 fun Activity.getNotesViewModel() =
     ViewModelFactory.get(applicationContext, NotesViewModel::class.java)
+
+fun DialogFragment.getNotesViewModel() = getApplicationContext()?.getNotesViewModel()
+
+fun DialogFragment.getApplicationContext(): Activity? {
+    val ctx = context
+    return if (ctx is Activity) ctx else null
+}

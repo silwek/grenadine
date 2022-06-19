@@ -5,13 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.silwek.grenadine.databinding.ActivityMainBinding
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var isInit = false
     private val adapter: NotesAdapter by lazy { NotesAdapter(this) }
+    private val notesViewModel: NotesViewModel by lazy { getNotesViewModel() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -24,39 +24,49 @@ class MainActivity : AppCompatActivity() {
         binding.listNotes.adapter = adapter
 
         adapter.onWantDelete = this::deleteNote
+        adapter.onWantEdit = this::editNote
+        adapter.onWantRevive = this::reviveNote
         binding.addNote.setOnClickListener { addNote() }
+        binding.refreshListNotes.isRefreshing = false
+        binding.refreshListNotes.setOnRefreshListener {
+            notesViewModel.loadNotes()
+        }
     }
 
     override fun onStart() {
         super.onStart()
         if (!isInit) {
-            getNotesViewModel().notes.observe(this, this::onNotes)
+            binding.refreshListNotes.isRefreshing = true
+            notesViewModel.notes.observe(this, this::onNotes)
             isInit = true
         }
-        getNotesViewModel().loadNotes()
+        notesViewModel.loadNotes()
     }
 
     private fun onNotes(notes: List<Note>) {
-        adapter.items = notes
+        adapter.updateItems(notes) {
+            binding.refreshListNotes.isRefreshing = false
+        }
     }
 
     private fun deleteNote(note: Note) {
         val idToDelete = note.id
         if (idToDelete != null)
-            getNotesViewModel().removeNote(idToDelete)
+            notesViewModel.removeNote(idToDelete)
     }
 
     private fun addNote() {
-        getNotesViewModel().addNote("New note ${getRandomString(6)}")
+        getNotesViewModel().editNote = null
+        NewNoteDialogFragment.showDialog(this)
     }
 
-    private val ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm"
-    private fun getRandomString(sizeOfRandomString: Int): String {
-        val random = Random()
-        val sb = StringBuilder(sizeOfRandomString)
-        for (i in 0 until sizeOfRandomString)
-            sb.append(ALLOWED_CHARACTERS[random.nextInt(ALLOWED_CHARACTERS.length)])
-        return sb.toString()
+    private fun editNote(note: Note) {
+        getNotesViewModel().editNote = note
+        NewNoteDialogFragment.showDialog(this)
+    }
+
+    private fun reviveNote(note: Note) {
+        getNotesViewModel().reviveNote(note)
     }
 
 }

@@ -6,47 +6,73 @@
     android:layout_height="wrap_content"
     android:padding="8dp">
 
-    <View
-        android:id="@+id/stale_bg"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:alpha="0"
-        android:background="@color/darkTextColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
+        style="@style/NoteItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="8dp"
-        style="@style/NoteItem"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/label"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-            android:padding="8dp"
-            tools:text="TextView"
-            tools:layout_editor_absoluteX="38dp"
-            tools:layout_editor_absoluteY="4dp" />
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/bt_delete"
-            style="@style/ButtonBase.Icon"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/label"
+                style="@style/NoteItemLabelAppearance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:textSize="14sp"
+                tools:text="TextView" />
+
+            <ImageButton
+                android:id="@+id/bt_delete"
+                style="@style/ButtonBase.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Supprimer"
+                app:srcCompat="@drawable/ic_baseline_close_24" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_baseline_delete_24"
-            tools:layout_editor_absoluteX="127dp"
-            tools:layout_editor_absoluteY="6dp" />
+            android:gravity="end"
+            android:id="@+id/expanded_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:paddingTop="8dp"
+            tools:visibility="visible">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_revive_custom"
+                android:layout_width="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_height="wrap_content"
+                android:text="Raviver de..." />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_revive_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Raviver" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_edit"
+                android:layout_marginStart="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editer" />
+        </LinearLayout>
 
     </LinearLayout>
 

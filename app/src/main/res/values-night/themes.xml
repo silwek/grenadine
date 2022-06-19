@@ -17,14 +17,31 @@
     <style name="AppbarLayoutStyle" parent="Widget.Material3.AppBarLayout">
         <item name="android:textColor">@color/lightTextColor</item>
         <item name="android:background">@color/mainColorNight</item>
-        <item name="android:titleTextAppearance">@style/ToolbarTitle</item>
     </style>
 
-    <style name="MainContainer">
-        <item name="android:background">@color/darkBackground</item>
+    <style name="ToolbarStyle" parent="_ToolbarStyle">
+        <item name="android:titleTextColor">@color/darkColor</item>
+        <item name="titleTextColor">@color/darkColor</item>
+    </style>
+
+    <style name="FAB" parent="_FAB">
+        <item name="android:backgroundTint">@color/accentDarkColorNight</item>
+        <item name="backgroundTint">@color/accentDarkColorNight</item>
+        <item name="android:tint">@color/accentLightColor</item>
+        <item name="tint">@color/accentLightColor</item>
+    </style>
+
+    <style name="ButtonBase" parent="_ButtonBase">
+        <item name="android:backgroundTint">@color/accentDarkColorNight</item>
+        <item name="backgroundTint">@color/accentDarkColorNight</item>
+        <item name="android:textColor">@color/accentLightColor</item>
     </style>
 
     <style name="ButtonBase.Icon" parent="@style/ButtonBase">
         <item name="android:tint">@color/lightTextColor</item>
+    </style>
+
+    <style name="NoteItemLabelAppearance" parent="_NoteItemLabelAppearance">
+        <item name="android:textColor">@color/lightTextColor</item>
     </style>
 </resources>
