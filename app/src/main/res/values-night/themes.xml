@@ -8,9 +8,10 @@
         <item name="android:colorPrimaryDark">@color/darkColorNight</item>
         <item name="android:colorAccent">@color/mainColor</item>
         <item name="colorAccent">@color/mainColor</item>
-        <item name="android:colorSecondary">@color/darkColor</item>
         <item name="colorSecondary">@color/darkColor</item>
         <item name="android:textColor">@color/lightTextColor</item>
+        <item name="colorPrimaryContainer">@color/mainColorNight</item>
+        <item name="colorOnPrimaryContainer">@color/lightColor</item>
         <item name="android:windowBackground">@color/darkBackground</item>
     </style>
 
@@ -34,11 +35,11 @@
     <style name="ButtonBase" parent="_ButtonBase">
         <item name="android:backgroundTint">@color/accentDarkColorNight</item>
         <item name="backgroundTint">@color/accentDarkColorNight</item>
-        <item name="android:textColor">@color/accentLightColor</item>
+        <item name="android:textColor">@color/lightColor</item>
     </style>
 
     <style name="ButtonBase.Icon" parent="@style/ButtonBase">
-        <item name="android:tint">@color/lightTextColor</item>
+        <item name="android:tint">@color/lightColor</item>
     </style>
 
     <style name="NoteItemLabelAppearance" parent="_NoteItemLabelAppearance">

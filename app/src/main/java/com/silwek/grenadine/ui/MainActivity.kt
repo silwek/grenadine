@@ -1,7 +1,9 @@
 package com.silwek.grenadine.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.silwek.grenadine.databinding.ActivityMainBinding
@@ -18,10 +20,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
 
         binding.listNotes.layoutManager = LinearLayoutManager(this)
         binding.listNotes.adapter = adapter
@@ -50,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         adapter.updateItems(notes) {
             binding.refreshListNotes.isRefreshing = false
         }
+        binding.emptyView.visibility = if (notes.isEmpty()) View.VISIBLE else View.INVISIBLE
     }
 
     private fun deleteNote(note: Note) {

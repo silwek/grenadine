@@ -6,16 +6,27 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_note_list"
     android:fitsSystemWindows="true"
-    android:padding="8dp">
+    tools:ignore="HardcodedText"
+    android:padding="@dimen/space_small">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
+        android:src="@drawable/bubbles_alt"
+        android:layout_margin="@dimen/space_medium"
+        app:tint="@color/mainColor"
+        android:alpha="0.05"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <LinearLayout
         style="@style/NoteItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/space_xlarge"
         android:orientation="vertical"
-        android:padding="8dp"
-
+        android:padding="@dimen/space_medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +38,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:boxStrokeColor="@color/accentLightColor">
@@ -37,12 +48,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusedByDefault="true"
+                    android:imeOptions="actionDone"
                     android:inputType="text|textAutoComplete"
                     android:lines="1"
                     android:maxLines="1"
-                    android:imeOptions="actionDone"
-                    android:padding="16dp"
-                    android:textSize="14sp"
+                    android:padding="@dimen/space_large"
+                    android:textSize="@dimen/text_subtitle"
                     tools:text="TextView" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -50,6 +61,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_medium"
             android:gravity="end"
             android:orientation="horizontal">
 

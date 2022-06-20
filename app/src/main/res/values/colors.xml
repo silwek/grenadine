@@ -11,6 +11,7 @@
     <color name="darkBackground">#121111</color>
     <color name="darkTextColor">#333333</color>
     <color name="lightTextColor">#ffffff</color>
+    <color name="neutralColor50">#888888</color>
 
 
     <color name="mainColorNight">#1B1617</color>
